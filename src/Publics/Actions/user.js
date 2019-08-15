@@ -17,6 +17,7 @@ export const getDataUser = () => {
   }
 }
 
+// get all users
 export const userLogin = data => {
   return {
     type: "LOGIN_USER",
