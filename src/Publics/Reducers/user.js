@@ -28,6 +28,27 @@ const user = (state = initialState, action) => {
         isFulfilled: true,
         userList: [...state.userList, action.payload.data]
       };
+    //highest score
+    case "HIGHEST_SCORE_LOADING":
+      return {
+        ...state,
+        isLoading: true,
+        isFulfilled: false,
+        isRejected: false
+      };
+    case "HIGHEST_SCORE_REJECTED":
+      return {
+        ...state,
+        isLoading: false,
+        isRejected: true
+      };
+    case "HIGHEST_SCORE_FULFILLED":
+      return {
+        ...state,
+        isLoading: false,
+        isFulfilled: true,
+        userList: [...state.userList, action.payload.data]
+      };
     //data user
     case "GET_ALL_USER_PENDING":
       return {

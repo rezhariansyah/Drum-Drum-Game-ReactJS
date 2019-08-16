@@ -17,6 +17,14 @@ export const getDataUser = () => {
   }
 }
 
+// get highest score
+export const highestScore = () => {
+  return {
+    type : "HIGHEST_SCORE",
+    payload : Axios.get(urlApi + '/score')
+  }
+}
+
 // get all users
 export const userLogin = data => {
   return {

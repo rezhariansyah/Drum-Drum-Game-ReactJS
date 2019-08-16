@@ -1,14 +1,63 @@
 import React, { Component } from "react";
 import "../../Support/Styles/Settings.css";
 import { Tab, Tabs } from "react-bootstrap";
+import { highestScore, getDataUser } from "../../Publics/Actions/user";
+import { connect } from "react-redux";
+
 
 class Settings extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userList: [],
+      users: []
+    };
+  }
+
+  componentDidMount = async () => {
+    await this.props.dispatch(highestScore());
+    this.setState({ userList: this.props.userList });
+    
+    await this.props.dispatch(getDataUser())
+    this.setState({ users: this.props.users });
+  };
+
+  renderJsx = () => {
+    let num = 1
+    let jsx = this.state.userList.map(val => {
+      return (
+        <tr>
+          <th scope="row">{num++}</th>
+          <td>{val.fullname}</td>
+          <td>{val.score}</td>
+        </tr>
+      );
+    });
+    return jsx;
+  };
+
+  renderUsers = () => {
+    let num = 1
+    let baba = this.state.users.map(val => {
+      return (
+        <tr>
+          <th scope="row">{num++}</th>
+          <td>{val.fullname}</td>
+          <td>{val.email}</td>
+          <td><input className="btn btn-outline-danger btn-sm" value="Delete" type="button" /></td>
+        </tr>
+      );
+    });
+    return baba;
+  };
+
   render() {
+    console.log(this.props.userList);
     return (
       <div className="container mt-5">
         <Tabs defaultActiveKey="home">
           <Tab eventKey="home" title="Leaderboard">
-          <table className="table table-hover">
+            <table className="table table-hover">
               <thead className="thead-dark">
                 <tr>
                   <th scope="col">No</th>
@@ -17,21 +66,7 @@ class Settings extends Component {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Mark</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Jacob</td>
-                  <td>@fat</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Larry</td>
-                  <td>@twitter</td>
-                </tr>
+                {this.renderJsx()}
               </tbody>
             </table>
           </Tab>
@@ -52,24 +87,7 @@ class Settings extends Component {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Larry</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-                </tr>
+                {this.renderUsers()}
               </tbody>
             </table>
           </Tab>
@@ -79,4 +97,11 @@ class Settings extends Component {
   }
 }
 
-export default Settings;
+const mapStateToProps = state => {
+  return {
+    userList: state.User.userList[0],
+    users : state.User.userList
+  };
+};
+
+export default connect(mapStateToProps)(Settings);
